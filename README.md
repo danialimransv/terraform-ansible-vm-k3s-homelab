@@ -1,17 +1,22 @@
 # 🏡 Terraform & Ansible Homelab with K3s
 
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Ansible](https://img.shields.io/badge/ansible-2.19-blue)](https://docs.ansible.com/)
-[![Terraform](https://img.shields.io/badge/terraform-1.7-blue)](https://www.terraform.io/)
+Automated homelab setup demonstrating **VM provisioning with Terraform** and **K3s Kubernetes deployment with Ansible**. Ideal for showcasing DevOps skills and infrastructure automation. 
+This was mainly created for myself to learn Terraform and Ansible within my homelab but I thought of sharing it as it may be useful for other people too (Although there might be millions of them already).
 
-Automated homelab setup demonstrating **VM provisioning with Terraform** and **K3s Kubernetes deployment with Ansible**. Ideal for showcasing DevOps skills and infrastructure automation.
+---
+
+## System Requirements:
+- Running proxmox environment with Terraform user created with PAM. 
+- Cloud init image template - Ref: [Tutorial by Techno Tim](https://www.youtube.com/watch?v=shiIi38cJe4)
+- Terraform installed on remote host or local host
+- Ansible installed on remote host or local host
 
 ---
 
 ## 🌟 Features
 
 - **Provision VMs with Terraform**  
-- **Install K3s cluster with Ansible** (1 master + multiple workers)  
+- **Install K3s cluster with Ansible** (1 master + single/multiple workers)  
 - **Idempotent and reusable roles**  
 - Dynamic cluster discovery: workers automatically join master  
 - Full **uninstall playbooks** to clean up cluster  
@@ -20,7 +25,7 @@ Automated homelab setup demonstrating **VM provisioning with Terraform** and **K
 
 ## 📂 Repository Structure
 
-```text
+`text
 .
 ├── ansible/
 │   ├── ansible.cfg
@@ -30,6 +35,7 @@ Automated homelab setup demonstrating **VM provisioning with Terraform** and **K
 ├── terraform/
 │   └── base-vm-deploy-k3s/
 └── README.md
+`
 
 🚀 Usage
 1️⃣ Provision VMs
