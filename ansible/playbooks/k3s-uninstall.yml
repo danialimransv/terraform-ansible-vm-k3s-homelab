@@ -1,0 +1,14 @@
+---
+- name: Uninstall K3s from master nodes
+  hosts: k3s_master
+  become: true
+  gather_facts: false
+  roles:
+    - k3s_master_uninstall
+
+- name: Uninstall K3s from worker nodes
+  hosts: k3s_workers
+  become: true
+  gather_facts: false
+  roles:
+    - k3s_worker_uninstall

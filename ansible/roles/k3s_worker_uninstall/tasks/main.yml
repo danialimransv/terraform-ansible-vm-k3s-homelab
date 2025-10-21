@@ -1,0 +1,31 @@
+---
+- name: Ensure K3s agent uninstall script exists
+  ansible.builtin.stat:
+    path: /usr/local/bin/k3s-agent-uninstall.sh
+  register: worker_uninstall_script
+
+- name: Fail if agent uninstall script is missing
+  ansible.builtin.fail:
+    msg: "K3s-agent uninstall script not found on worker. Did you install K3s properly?"
+  when: not worker_uninstall_script.stat.exists
+
+- name: Run K3s agent uninstall script
+  ansible.builtin.shell: /usr/local/bin/k3s-agent-uninstall.sh
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+- name: Remove leftover K3s agent files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/rancher
+    - /var/lib/rancher
+    - /var/lib/kubelet
+    - /etc/systemd/system/k3s-agent.service
+  ignore_errors: yes
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes

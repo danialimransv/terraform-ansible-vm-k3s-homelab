@@ -1,0 +1,16 @@
+---
+- name: Install K3s master
+  hosts: k3s_master
+  become: yes
+  roles:
+    - k3s_master
+
+- name: Install K3s workers
+  hosts: k3s_workers
+  become: yes
+  vars:
+    # Dynamically get the first master node's IP and token
+    k3s_url: "https://{{ hostvars[groups['k3s_master'][0]].k3s_master_ip }}:6443"
+    k3s_token: "{{ hostvars[groups['k3s_master'][0]].k3s_master_token }}"
+  roles:
+    - k3s_worker

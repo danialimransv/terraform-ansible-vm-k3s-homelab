@@ -1,0 +1,31 @@
+---
+- name: Ensure K3s uninstall script exists on master
+  ansible.builtin.stat:
+    path: /usr/local/bin/k3s-uninstall.sh
+  register: master_uninstall_script
+
+- name: Fail if master uninstall script is missing
+  ansible.builtin.fail:
+    msg: "K3s uninstall script not found on master. Did you install K3s with the default method?"
+  when: not master_uninstall_script.stat.exists
+
+- name: Run K3s uninstall script
+  ansible.builtin.shell: /usr/local/bin/k3s-uninstall.sh
+  args:
+    executable: /bin/bash
+  ignore_errors: yes
+
+- name: Remove leftover K3s directories and service files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/rancher
+    - /var/lib/rancher
+    - /var/lib/kubelet
+    - /etc/systemd/system/k3s.service
+  ignore_errors: yes
+
+- name: Reload systemd daemon
+  ansible.builtin.systemd:
+    daemon_reload: yes

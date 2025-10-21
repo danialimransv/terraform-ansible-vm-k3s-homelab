@@ -1,0 +1,39 @@
+---
+
+- name: Check if K3s master is already installed
+  stat:
+    path: /usr/local/bin/k3s
+  register: k3s_master_binary
+
+- name: Install K3s master (if not installed)
+  shell: |
+    curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig-mode 644" sh -
+  args:
+    creates: /usr/local/bin/k3s
+  when: not k3s_master_binary.stat.exists
+
+- name: Ensure K3s service is running
+  systemd:
+    name: k3s
+    state: started
+    enabled: yes
+
+- name: Retrieve master join token
+  slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: node_token
+  when: k3s_master_binary.stat.exists
+
+- name: Save join token as a fact
+  set_fact:
+    k3s_master_token: "{{ node_token['content'] | b64decode | trim }}"
+  when: node_token is defined
+
+- name: Get master node IP (primary interface)
+  command: hostname -I
+  register: master_ip
+  changed_when: false
+
+- name: Save master IP as a fact
+  set_fact:
+    k3s_master_ip: "{{ master_ip.stdout.split()[0] }}"

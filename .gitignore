@@ -1,0 +1,20 @@
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Sensitive files
+*.tfvars
+*.auto.tfvars
+
+# ansible + k3s
+.env/
+*.log
+ansible.cfg
+kubeconfig
