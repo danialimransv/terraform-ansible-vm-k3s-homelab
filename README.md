@@ -6,8 +6,8 @@ This was mainly created for myself to learn Terraform and Ansible within my home
 ---
 
 ## System Requirements:
-- Running proxmox environment with Terraform user created with PAM. 
-- Cloud init image template - Ref: [Tutorial by Techno Tim](https://www.youtube.com/watch?v=shiIi38cJe4)
+- Running proxmox environment with Terraform user created with PAM. Good tutorials here: [Learn Linux TV](https://www.youtube.com/watch?v=1kFBk0ePtxo)
+- Cloud init image template with qemu agent script - Good tutorials here: [Techno Tim](https://www.youtube.com/watch?v=shiIi38cJe4) or [UntouchedWagons/Ubuntu-CloudInit-Docs](https://github.com/UntouchedWagons/Ubuntu-CloudInit-Docs)
 - Terraform installed on remote host or local host
 - Ansible installed on remote host or local host
 
@@ -25,7 +25,7 @@ This was mainly created for myself to learn Terraform and Ansible within my home
 
 ## 📂 Repository Structure
 
-`text
+```
 .
 ├── ansible/
 │   ├── ansible.cfg
@@ -34,33 +34,62 @@ This was mainly created for myself to learn Terraform and Ansible within my home
 │   └── roles/
 ├── terraform/
 │   └── base-vm-deploy-k3s/
+|       ├── main.tf
+|       ├── provider.tf
+|       ├── variables.auto.tfvars
+|       └── variables.tf
 └── README.md
-`
+```
 
-🚀 Usage
-1️⃣ Provision VMs
+> [!IMPORTANT]
+> It is recommended to go through the code/files and understand what variables need to be changed for your environemnt.
+
+---
+
+## 🚀 Usage
+
+## 1️⃣ Provision VMs
+
+```
 cd terraform/base-vm-deploy-k3s
 terraform init
 terraform apply
+```
 
-2️⃣ Install K3s Cluster
+## 2️⃣ Install K3s Cluster
+```
 cd ../../ansible
-ansible-playbook playbooks/k3s-install.yml
 
-3️⃣ Validate Cluster
+Add ansible.cfg file to ansible directory
+```
+Example:
+```
+[defaults]
+inventory = inventory/hosts
+remote_user = serveradmin
+roles_path = ./roles
+log_path = ./ansible.log
+scp_if_ssh = True
+host_key_checking = False
+```
+```
+ansible-playbook playbooks/k3s-install.yml
+```
+
+## 3️⃣ Validate Cluster
+
+```
 ssh serveradmin@<master_ip>
 sudo kubectl get nodes
-
-
+```
 ✅ All worker nodes should be joined and Ready.
 
-4️⃣ Uninstall K3s (Optional)
+
+## 4️⃣ Uninstall K3s if you want a fresh start of VM's (Optional)
+
+```
 ansible-playbook playbooks/k3s-uninstall.yml
-
-🎨 Demo / Screenshot
-<p align="center"> <img src="assets/demo.png" alt="K3s cluster demo" width="600"/> </p>
-
-Replace assets/demo.png with an actual screenshot or GIF of your homelab/K3s cluster.
+```
 
 ⚙️ Roles
 Role	Description
