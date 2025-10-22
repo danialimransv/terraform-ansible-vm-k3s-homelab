@@ -9,10 +9,6 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
-# Sensitive files
-*.tfvars
-*.auto.tfvars
-
 # ansible + k3s
 .env/
 *.log

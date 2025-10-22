@@ -1,3 +1,5 @@
+#list of all variables
+
 variable "vm_count" {
   type    = number
 }
