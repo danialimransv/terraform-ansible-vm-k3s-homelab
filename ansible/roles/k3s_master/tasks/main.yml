@@ -1,5 +1,4 @@
 ---
-
 - name: Check if K3s master is already installed
   stat:
     path: /usr/local/bin/k3s
@@ -18,17 +17,28 @@
     state: started
     enabled: yes
 
+# --- Wait for K3s to generate join token ---
+# Removed 'when:' so it runs even on first install
+- name: Wait for K3s node token file to exist
+  wait_for:
+    path: /var/lib/rancher/k3s/server/node-token
+    state: present
+    timeout: 120
+
 - name: Retrieve master join token
   slurp:
     src: /var/lib/rancher/k3s/server/node-token
   register: node_token
-  when: k3s_master_binary.stat.exists
 
 - name: Save join token as a fact
   set_fact:
-    k3s_master_token: "{{ node_token['content'] | b64decode | trim }}"
-  when: node_token is defined
+    k3s_master_token: "{{ node_token.content | b64decode | trim }}"
+  when:
+    - node_token is defined
+    - node_token is mapping
+    - "'content' in node_token"
 
+# --- Retrieve and save master node IP ---
 - name: Get master node IP (primary interface)
   command: hostname -I
   register: master_ip
@@ -37,3 +47,10 @@
 - name: Save master IP as a fact
   set_fact:
     k3s_master_ip: "{{ master_ip.stdout.split()[0] }}"
+
+# --- Optional debug output ---
+- name: Debug master join info
+  debug:
+    msg:
+      - "Master IP: {{ k3s_master_ip }}"
+      - "Join token: {{ k3s_master_token | default('Token not yet available') }}"
