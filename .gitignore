@@ -12,4 +12,5 @@ override.tf.json
 # ansible + k3s
 .env/
 *.log
+ansible.cfg
 kubeconfig
