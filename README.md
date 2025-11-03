@@ -90,10 +90,12 @@ sudo kubectl get nodes
 ```
 ansible-playbook playbooks/k3s-uninstall.yml
 ```
+---
+## ⚙️ Roles
+Roles / Description
 
-⚙️ Roles
-Role	Description
-k3s_master	Installs and configures K3s master node
-k3s_worker	Installs and joins K3s worker nodes
-k3s_master_uninstall	Uninstalls K3s master node
-k3s_worker_uninstall	Uninstalls K3s worker nodes
+ - k3s_master - Installs and configures K3s master node
+ - k3s_worker - Installs and joins K3s worker nodes
+ - k3s_master_uninstall - Uninstalls K3s master node 
+ - k3s_worker_uninstall - Uninstalls K3s worker nodes
+
