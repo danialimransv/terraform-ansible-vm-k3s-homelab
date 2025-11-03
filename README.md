@@ -18,8 +18,8 @@ This was mainly created for myself to learn Terraform and Ansible within my home
 - **Provision VMs with Terraform**  
 - **Install K3s cluster with Ansible** (1 master + single/multiple workers)  
 - **Idempotent and reusable roles**  
-- Dynamic cluster discovery: workers automatically join master  
-- Full **uninstall playbooks** to clean up cluster  
+- **Dynamic cluster discovery: workers automatically join master**  
+- **Full **uninstall playbooks** to clean up cluster**  
 
 ---
 
@@ -101,4 +101,4 @@ Roles / Description
  
 ---
 
-Feedback is welcome :D
+Feedback is appreciated :D
